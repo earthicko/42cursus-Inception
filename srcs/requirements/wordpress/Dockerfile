@@ -39,4 +39,3 @@ EXPOSE 9000
 
 #Launch PHP FPM in foreground and ignore deamonize from conf file (-F)
 CMD ["/usr/sbin/php-fpm7.3", "-F"]
-
