@@ -1,10 +1,10 @@
 FROM    debian:bullseye
 
-RUN     apk update && apk upgrade && apk add --no-cache \
-        mariadb \
-        mariadb-client
+RUN     apt-get update
+RUN     apt-get install -y mariadb-server
 
-COPY tools/configure.sh /usr/local/bin/configure.sh
+COPY    ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY    tools/configure.sh /usr/local/bin/configure.sh
 
 RUN     chmod +x /usr/local/bin/configure.sh
 
