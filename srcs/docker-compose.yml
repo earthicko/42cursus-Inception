@@ -1,55 +1,67 @@
-version: '3'
+version: "3.8"
 
 services:
   nginx:
+    build: ./requirements/nginx/
     container_name: nginx
-    build: ./requirements/nginx
-    ports:
-      - 443:443
-    volumes:
-      - wordpress_data:/var/www/html
+    image: nginx
     restart: always
+    volumes:
+      - wp_volume:/var/www/html/wordpress
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    env_file:
+      - .env
     networks:
-      - network
+      - inception_network
 
   mariadb:
+    build: ./requirements/mariadb/
     container_name: mariadb
-    build: ./requirements/mariadb
-    volumes:
-      - mariadb_data:/var/lib/mysql
-    networks:
-      - network
+    image: mariadb
     restart: always
+    expose:
+      - "3306"
+    volumes:
+      - db_volume:/var/lib/mysql/
     env_file:
       - .env
+    networks:
+      - inception_network
 
   wordpress:
+    build: ./requirements/wordpress/
     container_name: wordpress
+    image: wordpress
+    restart: always
     depends_on:
       - mariadb
-    build: ./requirements/wordpress
-    restart: always
+    expose:
+      - "9000"
+    volumes:
+      - wp_volume:/var/www/html/wordpress
     env_file:
       - .env
-    volumes:
-      - wordpress_data:/var/www/html
     networks:
-      - network
+      - inception_network
 
 volumes:
-  mariadb_data:
+  wp_volume:
     driver: local
     driver_opts:
-      type: none
-      device: "${HOME}/data/mysql"
+      type: volume
+      device: /home/ubuntu/data/wordpress
       o: bind
-  wordpress_data:
+
+  db_volume:
     driver: local
     driver_opts:
-      type: none
-      device: "${HOME}/data/wordpress"
+      type: volume
+      device: /home/ubuntu/data/mariadb
       o: bind
 
 networks:
-  network:
+  inception_network:
     driver: bridge

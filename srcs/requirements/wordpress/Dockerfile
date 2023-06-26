@@ -1,41 +1,29 @@
-FROM debian:bullseye
+FROM	debian:bullseye
 
-RUN apt-get update && apt-get -y install \
-	wget \
-	curl \
-	bash \
-	php \
-	php-cgi \
-	php-mysql \
-	php-fpm \
-	php-pdo \
-	php-gd php-cli \
-	php-mbstring \
-	redis \
-	php-redis \
-	&& rm -rf /var/lib/apt/lists/*
+RUN		apt-get update -y && \
+		apt-get upgrade -y && \
+		apt-get -y install \
+		mariadb-client \
+		wget \
+		curl \
+		tar \
+		php7.4-fpm \
+		php-cli \
+		php-mysql \
+		vim \
+		sudo
 
-# I need to install wp_cli command and put it in the right directory /usr/local/bin
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-  && chmod +x wp-cli.phar \
-  && mv wp-cli.phar /usr/local/bin/wp
+COPY	./tools/wordpress_setup.sh /tmp/wordpress_setup.sh
+COPY	./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
-# Copy the .conf in the html directory
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
+# wp-cli를 통해 wordpress 설치
+# wp-cli: the command-line interface for WordPress
+RUN		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp
 
-#Create the folder to enable php start
-RUN mkdir /run/php
+WORKDIR	/var/www/html/wordpress
+RUN		mkdir -p /run/php
 
-#we copy the script, give the right to launch it in local on our computer
-COPY ./tools/create_wordpress.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/create_wordpress.sh
-ENTRYPOINT ["/usr/local/bin/create_wordpress.sh"]
+# 이 docker image는 9000번 포트를 외부에 공개할 예정이라는 의미
+EXPOSE	9000
 
-#We go the html directory
-WORKDIR /var/www/html/
-
-#We expose the 9000 port
-EXPOSE 9000
-
-#Launch PHP FPM in foreground and ignore deamonize from conf file (-F)
-CMD ["/usr/sbin/php-fpm7.3", "-F"]
+ENTRYPOINT ["sh", "/tmp/wordpress_setup.sh"]

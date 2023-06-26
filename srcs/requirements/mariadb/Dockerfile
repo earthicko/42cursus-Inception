@@ -1,11 +1,16 @@
-FROM    debian:bullseye
+FROM	debian:bullseye
 
-RUN     apt-get update
-RUN     apt-get install -y mariadb-server
+RUN		apt-get update -y && \
+		apt-get upgrade -y && \
+		apt-get -y install \
+		mariadb-server \
+		mariadb-client \
+		vim
 
-COPY    ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-COPY    tools/configure.sh /usr/local/bin/configure.sh
+COPY	./tools/mariadb_setup.sh /tmp/mariadb_setup.sh
+COPY	./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 
-RUN     chmod +x /usr/local/bin/configure.sh
+ENTRYPOINT ["sh", "/tmp/mariadb_setup.sh"]
 
-ENTRYPOINT ["/usr/local/bin/configure.sh"]
+# 이 docker image는 3306번 포트를 외부에 공개할 예정이라는 의미
+EXPOSE 3306
