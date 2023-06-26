@@ -1,7 +1,6 @@
 #!/bin/sh
 
-set -e
-	# 오류가 발생하면 스크립트를 바로 종료
+set -e # 오류가 발생하면 스크립트를 바로 종료
 
 MYSQL_SETUP_FILE=/var/lib/mysql/.setup
 
