@@ -1,4 +1,9 @@
-VOLUME_PATH	:= ${HOME}/data
+ifeq ($(USER),root)
+	VOLUME_PATH	:= /home/${SUDO_USER}/data
+else
+	VOLUME_PATH	:= /home/${USER}/data
+endif
+
 HOST_LINK	:= "127.0.0.1	donghyle.42.fr" > /etc/hosts
 
 all:
