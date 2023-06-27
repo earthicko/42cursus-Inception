@@ -52,14 +52,14 @@ volumes:
     driver: local
     driver_opts:
       type: volume
-      device: /home/ubuntu/data/wordpress
+      device: "${HOME_DIR}/data/wordpress"
       o: bind
 
   db_volume:
     driver: local
     driver_opts:
       type: volume
-      device: /home/ubuntu/data/mariadb
+      device: "${HOME_DIR}/data/mariadb"
       o: bind
 
 networks:
