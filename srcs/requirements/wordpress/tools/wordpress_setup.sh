@@ -2,10 +2,7 @@
 
 set -e
 
-# 파일의 소유자를 변경하는 명령
 chown -R www-data:www-data /var/www/
-	# -R: Change the user ID and/or the group ID 
-	# for the file hierarchies rooted in the files instead of just the files themselves.
 
 if [ ! -f "/var/www/html/wordpress/index.php" ]; then
 	sudo -u www-data sh -c " \
