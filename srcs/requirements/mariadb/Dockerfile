@@ -1,12 +1,14 @@
 FROM		debian:bullseye
 
-RUN			apt-get update -y && \
+WORKDIR		/db
+
+RUN			apt-get update && \
 			apt-get upgrade -y && \
-			apt-get -y install mariadb-server mariadb-client vim
+			apt-get install -y mariadb-server
 
-COPY		./tools/mariadb_setup.sh /tmp/mariadb_setup.sh
-COPY		./conf/50-server.conf /etc/mysql/mariadb.conf.d/
+COPY		/tools/setup_mariadb.sh /tmp
+RUN			chmod +x /tmp/setup_mariadb.sh
 
-ENTRYPOINT	["sh", "/tmp/mariadb_setup.sh"]
+ENTRYPOINT	["/tmp/setup_mariadb.sh"]
 
-EXPOSE		3306
+CMD			["mysqld_safe", "--safe-mode"]

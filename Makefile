@@ -1,28 +1,29 @@
-all:
-	make prune
-	make build
-
-prune:
-	sudo srcs/prune.sh srcs/.env
-
-build:
-	sudo docker compose -f ./srcs/docker-compose.yml up --build -d
+FILE=./srcs/docker-compose.yml
 
 up:
-	sudo docker compose -f ./srcs/docker-compose.yml up -d
+	sudo srcs/prune.sh srcs/.env
+	sudo docker compose -f $(FILE) up --build -d
+
+start:
+	sudo docker compose -f $(FILE) start
+
+stop:
+	sudo docker compose -f $(FILE) stop
 
 down:
-	sudo docker compose -f ./srcs/docker-compose.yml down
+	sudo docker compose -f $(FILE) down
 
 clean:
-	sudo docker compose -f ./srcs/docker-compose.yml down --rmi all --volumes
+	sudo docker compose -f $(FILE) down -v
 
 fclean:
+	make down
 	make clean
-	rm -rf $(VOLUME_PATH)
+	sudo docker compose -f $(FILE) down --rmi all
+	sudo srcs/fclean.sh
 
 re:
 	make fclean
-	make all
+	make up
 
-.PHONY: all prune down clean fclean re
+.PHONY : up start stop down clean fclean re
