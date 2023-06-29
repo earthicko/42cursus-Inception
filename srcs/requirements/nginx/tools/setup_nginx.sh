@@ -2,8 +2,6 @@
 
 openssl req -x509 -newkey rsa:2048 -nodes -keyout $KEY -out $CERTIF -days 365 -subj "/C=KR/L=Seoul/O=Seoul/OU=Rush03/CN=donghyle.42.fr"
 
-touch /etc/nginx/sites-available/wordpress
-
 echo "server 
 		{
 			listen [::]:443 ssl;

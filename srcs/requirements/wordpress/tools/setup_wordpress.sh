@@ -14,10 +14,10 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
 	cd /var/www/html/
 
-	wp config set DB_NAME $M_DB_NAME  --allow-root
-	wp config set DB_USER $M_USER_NAME  --allow-root
-	wp config set DB_PASSWORD $M_USER_PASS  --allow-root
-	wp config set DB_HOST $W_DB_HOST  --allow-root
+	wp config set DB_NAME $M_DB_NAME --allow-root
+	wp config set DB_USER $M_USER_NAME --allow-root
+	wp config set DB_PASSWORD $M_USER_PASS --allow-root
+	wp config set DB_HOST $W_DB_HOST --allow-root
 
 	wp core install --url=$DOMAINE_NAME --title=$W_TITLE --admin_user=$W_ADMIN_U --admin_password=$W_ADMIN_P --admin_email=$W_ADMIN_E --skip-email --allow-root
 
@@ -25,7 +25,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
 	sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 0.0.0.0:9000/g' /etc/php/7.4/fpm/pool.d/www.conf
 
-	wp plugin update --all  --allow-root
+	wp plugin update --all --allow-root
 
 fi
 
