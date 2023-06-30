@@ -1,6 +1,6 @@
 #!/bin/bash
 
-openssl req -x509 -newkey rsa:2048 -nodes -keyout $KEY -out $CERTIF -days 365 -subj "/C=KR/L=Seoul/O=Seoul/OU=Rush03/CN=donghyle.42.fr"
+openssl req -x509 -newkey rsa:2048 -nodes -keyout $KEY_PATH -out $CERTIFICATE_PATH -days 365 -subj "/C=KR/L=Seoul/O=Seoul/OU=Rush03/CN=donghyle.42.fr"
 
 echo "server 
 		{
@@ -11,8 +11,8 @@ echo "server
 			index index.php;
 			server_name	$SERVER_NAME;
 
-			ssl_certificate $CERTIF;
-			ssl_certificate_key $KEY;
+			ssl_certificate $CERTIFICATE_PATH;
+			ssl_certificate_key $KEY_PATH;
 			ssl_protocols TLSv1.2 TLSv1.3;
 
 			location ~ [^/]\.php(/|$) { 
