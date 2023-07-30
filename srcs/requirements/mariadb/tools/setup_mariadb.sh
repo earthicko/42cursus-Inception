@@ -1,12 +1,10 @@
 #!/bin/bash
 
-service mariadb start
-
 MYSQL_SETUP_DONE_INDICATOR=/var/lib/mysql/.setupdone
 
 if [ ! -f "$MYSQL_SETUP_DONE_INDICATOR" ]; then
 
-	sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
+	service mariadb start
 
 	echo "CREATE DATABASE IF NOT EXISTS ${DB_NAME};" > maria.sql
 	echo "CREATE USER IF NOT EXISTS '${DB_USER_NAME}'@'%' IDENTIFIED BY '${DB_USER_PASS}';" >> maria.sql
@@ -18,7 +16,10 @@ if [ ! -f "$MYSQL_SETUP_DONE_INDICATOR" ]; then
 
 	mysqladmin shutdown -p${DB_ROOT_PASS}
 
+	service mariadb stop
+
 	touch $MYSQL_SETUP_DONE_INDICATOR
 fi
 
+sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mysql/mariadb.conf.d/50-server.cnf
 exec "$@"
