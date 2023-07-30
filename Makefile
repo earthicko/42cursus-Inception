@@ -4,14 +4,14 @@ up:
 	sudo srcs/prune.sh srcs/.env
 	sudo docker compose -f $(FILE) up --build -d
 
+down:
+	sudo docker compose -f $(FILE) down
+
 start:
 	sudo docker compose -f $(FILE) start
 
 stop:
 	sudo docker compose -f $(FILE) stop
-
-down:
-	sudo docker compose -f $(FILE) down
 
 clean:
 	sudo docker compose -f $(FILE) down -v
