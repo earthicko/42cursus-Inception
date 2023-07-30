@@ -31,8 +31,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
 	wp user create $WP_USER1_NAME $WP_USER1_EMAIL --role=$WP_USER1_ROLE --user_pass=$WP_USER1_PASS --allow-root
 
-	sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 0.0.0.0:9000/g' /etc/php/7.4/fpm/pool.d/www.conf
-
 fi
 
+sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 0.0.0.0:9000/g' /etc/php/7.4/fpm/pool.d/www.conf
 exec "$@"
